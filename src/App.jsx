@@ -78,6 +78,54 @@ const App = () => {
     return translations[gender] || gender;
   };
 
+  const translateLocationType = (type) => {
+    const translations = {
+      'Planet': 'Planeta',
+      'Cluster': 'Cúmulo',
+      'Space station': 'Estación espacial',
+      'Microverse': 'Microverso',
+      'TV': 'TV',
+      'Resort': 'Resort',
+      'Fantasy town': 'Ciudad de fantasía',
+      'Dream': 'Sueño',
+      'Dimension': 'Dimensión',
+      'unknown': 'Desconocido',
+      'Menagerie': 'Zoológico',
+      'Game': 'Juego',
+      'Customs': 'Aduana',
+      'Daycare': 'Guardería',
+      'Dwarf planet (Celestial Dwarf)': 'Planeta enano',
+      'Miniverse': 'Miniverso',
+      'Teenyverse': 'Teenyverso',
+      'Box': 'Caja',
+      'Spacecraft': 'Nave espacial',
+      'Artificially generated world': 'Mundo generado artificialmente',
+      'Machine': 'Máquina',
+      'Arcade': 'Arcade',
+      'Memory': 'Memoria',
+      'Hell': 'Infierno',
+      'Police Department': 'Departamento de policía',
+      'Reality': 'Realidad',
+      'Death Star': 'Estrella de la muerte',
+      'Base': 'Base'
+    };
+    return translations[type] || type;
+  };
+
+  const translateDimension = (dimension) => {
+    const translations = {
+      'Dimension C-137': 'Dimensión C-137',
+      'unknown': 'Desconocida',
+      'Post-Apocalyptic Dimension': 'Dimensión Post-Apocalíptica',
+      'Replacement Dimension': 'Dimensión de Reemplazo',
+      'Cronenberg Dimension': 'Dimensión Cronenberg',
+      'Fantasy Dimension': 'Dimensión de Fantasía',
+      'Dimension 5-126': 'Dimensión 5-126',
+      'Testicle Monster Dimension': 'Dimensión del Monstruo Testículo'
+    };
+    return translations[dimension] || dimension;
+  };
+
   const Navigation = () => (
     <nav className="bg-gradient-to-r from-green-600 to-blue-600 shadow-lg">
       <div className="max-w-7xl mx-auto px-4">
@@ -290,11 +338,11 @@ const App = () => {
                   <p>
                     <span className="font-semibold">Tipo:</span>{' '}
                     <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">
-                      {loc.type}
+                      {translateLocationType(loc.type)}
                     </span>
                   </p>
                   <p>
-                    <span className="font-semibold">Dimensión:</span> {loc.dimension}
+                    <span className="font-semibold">Dimensión:</span> {translateDimension(loc.dimension)}
                   </p>
                 </div>
               </div>
