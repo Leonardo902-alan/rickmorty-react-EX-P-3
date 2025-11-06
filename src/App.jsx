@@ -2,11 +2,14 @@ import { useState, useEffect } from 'react';
 import { Camera, Users, MapPin, Tv } from 'lucide-react';
 
 const App = () => {
-  const [currentRoute, setCurrentRoute] = useState('home');
+  const [currentRoute, setCurrentRoute] = useState('inicio');
   const [characters, setCharacters] = useState([]);
   const [locations, setLocations] = useState([]);
   const [episodes, setEpisodes] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  // IDs de ubicaciones más reconocidas de la serie
+  const famousLocationIds = [1, 2, 3, 5, 6, 7, 8, 9, 11];
 
   useEffect(() => {
     fetchData();
@@ -15,23 +18,64 @@ const App = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [charsRes, locsRes, epsRes] = await Promise.all([
-        fetch('https://rickandmortyapi.com/api/character'),
-        fetch('https://rickandmortyapi.com/api/location'),
-        fetch('https://rickandmortyapi.com/api/episode')
-      ]);
-
+      const charsRes = await fetch('https://rickandmortyapi.com/api/character');
       const charsData = await charsRes.json();
-      const locsData = await locsRes.json();
+      
+      // Filtrar para excluir a "Abadango Cluster Princess"
+      const filteredChars = charsData.results.filter(char => 
+        char.name !== 'Abadango Cluster Princess'
+      ).slice(0, 6);
+
+      // Obtener ubicaciones específicas (las más reconocidas)
+      const locationPromises = famousLocationIds.map(id =>
+        fetch(`https://rickandmortyapi.com/api/location/${id}`).then(res => res.json())
+      );
+      const locsData = await Promise.all(locationPromises);
+
+      const epsRes = await fetch('https://rickandmortyapi.com/api/episode');
       const epsData = await epsRes.json();
 
-      setCharacters(charsData.results.slice(0, 6));
-      setLocations(locsData.results.slice(0, 20));
+      setCharacters(filteredChars);
+      setLocations(locsData);
       setEpisodes(epsData.results.slice(0, 20));
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error al cargar datos:', error);
     }
     setLoading(false);
+  };
+
+  const translateStatus = (status) => {
+    const translations = {
+      'Alive': 'Vivo',
+      'Dead': 'Muerto',
+      'unknown': 'Desconocido'
+    };
+    return translations[status] || status;
+  };
+
+  const translateSpecies = (species) => {
+    const translations = {
+      'Human': 'Humano',
+      'Alien': 'Alienígena',
+      'Humanoid': 'Humanoide',
+      'Robot': 'Robot',
+      'Cronenberg': 'Cronenberg',
+      'Mythological Creature': 'Criatura Mitológica',
+      'Animal': 'Animal',
+      'Poopybutthole': 'Poopybutthole',
+      'unknown': 'Desconocido'
+    };
+    return translations[species] || species;
+  };
+
+  const translateGender = (gender) => {
+    const translations = {
+      'Male': 'Masculino',
+      'Female': 'Femenino',
+      'Genderless': 'Sin género',
+      'unknown': 'Desconocido'
+    };
+    return translations[gender] || gender;
   };
 
   const Navigation = () => (
@@ -40,48 +84,48 @@ const App = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-2">
             <Camera className="text-white" size={32} />
-            <span className="text-white text-xl font-bold">Rick & Morty Universe</span>
+            <span className="text-white text-xl font-bold">Universo Rick & Morty</span>
           </div>
           <div className="flex space-x-4">
             <button
-              onClick={() => setCurrentRoute('home')}
+              onClick={() => setCurrentRoute('inicio')}
               className={`px-4 py-2 rounded-lg transition-all ${
-                currentRoute === 'home'
+                currentRoute === 'inicio'
                   ? 'bg-white text-green-600 font-semibold'
                   : 'text-white hover:bg-white/20'
               }`}
             >
-              Home
+              Inicio
             </button>
             <button
-              onClick={() => setCurrentRoute('characters')}
+              onClick={() => setCurrentRoute('personajes')}
               className={`px-4 py-2 rounded-lg transition-all ${
-                currentRoute === 'characters'
+                currentRoute === 'personajes'
                   ? 'bg-white text-green-600 font-semibold'
                   : 'text-white hover:bg-white/20'
               }`}
             >
-              Characters
+              Personajes
             </button>
             <button
-              onClick={() => setCurrentRoute('locations')}
+              onClick={() => setCurrentRoute('ubicaciones')}
               className={`px-4 py-2 rounded-lg transition-all ${
-                currentRoute === 'locations'
+                currentRoute === 'ubicaciones'
                   ? 'bg-white text-green-600 font-semibold'
                   : 'text-white hover:bg-white/20'
               }`}
             >
-              Locations
+              Ubicaciones
             </button>
             <button
-              onClick={() => setCurrentRoute('episodes')}
+              onClick={() => setCurrentRoute('episodios')}
               className={`px-4 py-2 rounded-lg transition-all ${
-                currentRoute === 'episodes'
+                currentRoute === 'episodios'
                   ? 'bg-white text-green-600 font-semibold'
                   : 'text-white hover:bg-white/20'
               }`}
             >
-              Episodes
+              Episodios
             </button>
           </div>
         </div>
@@ -94,7 +138,7 @@ const App = () => {
       <div className="relative bg-gradient-to-r from-green-500 via-blue-500 to-purple-600 text-white py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-5xl font-bold mb-4 animate-pulse">
-            🛸 Rick & Morty Universe
+            🛸 Universo Rick & Morty
           </h1>
           <p className="text-xl mb-6">
             Explora el multiverso infinito de Rick y Morty. Descubre personajes, 
@@ -103,13 +147,13 @@ const App = () => {
           </p>
           <div className="flex justify-center space-x-4">
             <button
-              onClick={() => setCurrentRoute('characters')}
+              onClick={() => setCurrentRoute('personajes')}
               className="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-100 transition-all transform hover:scale-105"
             >
               Ver Personajes
             </button>
             <button
-              onClick={() => setCurrentRoute('locations')}
+              onClick={() => setCurrentRoute('ubicaciones')}
               className="bg-transparent border-2 border-white px-6 py-3 rounded-lg font-semibold hover:bg-white/20 transition-all"
             >
               Explorar Ubicaciones
@@ -151,7 +195,7 @@ const App = () => {
                           : 'bg-gray-500'
                       }`}
                     ></span>
-                    <span>{char.status} - {char.species}</span>
+                    <span>{translateStatus(char.status)} - {translateSpecies(char.species)}</span>
                   </div>
                 </div>
               </div>
@@ -172,6 +216,7 @@ const App = () => {
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+            <p className="mt-4 text-gray-600">Cargando personajes...</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -199,14 +244,14 @@ const App = () => {
                             : 'bg-gray-100 text-gray-800'
                         }`}
                       >
-                        {char.status}
+                        {translateStatus(char.status)}
                       </span>
                     </p>
                     <p>
-                      <span className="font-semibold">Especie:</span> {char.species}
+                      <span className="font-semibold">Especie:</span> {translateSpecies(char.species)}
                     </p>
                     <p>
-                      <span className="font-semibold">Género:</span> {char.gender}
+                      <span className="font-semibold">Género:</span> {translateGender(char.gender)}
                     </p>
                   </div>
                 </div>
@@ -223,11 +268,15 @@ const App = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center space-x-3 mb-8">
           <MapPin className="text-blue-600" size={40} />
-          <h1 className="text-4xl font-bold text-gray-800">Ubicaciones</h1>
+          <h1 className="text-4xl font-bold text-gray-800">Ubicaciones Más Reconocidas</h1>
         </div>
+        <p className="text-gray-600 mb-8 text-center">
+          Las 9 ubicaciones más icónicas del universo de Rick & Morty
+        </p>
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <p className="mt-4 text-gray-600">Cargando ubicaciones...</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -246,9 +295,6 @@ const App = () => {
                   </p>
                   <p>
                     <span className="font-semibold">Dimensión:</span> {loc.dimension}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Residentes:</span> {loc.residents.length}
                   </p>
                 </div>
               </div>
@@ -269,6 +315,7 @@ const App = () => {
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+            <p className="mt-4 text-gray-600">Cargando episodios...</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -303,10 +350,10 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navigation />
-      {currentRoute === 'home' && <HomePage />}
-      {currentRoute === 'characters' && <CharactersPage />}
-      {currentRoute === 'locations' && <LocationsPage />}
-      {currentRoute === 'episodes' && <EpisodesPage />}
+      {currentRoute === 'inicio' && <HomePage />}
+      {currentRoute === 'personajes' && <CharactersPage />}
+      {currentRoute === 'ubicaciones' && <LocationsPage />}
+      {currentRoute === 'episodios' && <EpisodesPage />}
     </div>
   );
 };
