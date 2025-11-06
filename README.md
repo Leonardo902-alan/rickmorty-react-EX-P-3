@@ -1,16 +1,65 @@
-# React + Vite
+#  Rick & Morty Universe
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Una aplicación web interactiva desarrollada en React que consume la API pública de Rick & Morty para explorar personajes, ubicaciones y episodios del multiverso.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tecnologías Utilizadas
 
-## React Compiler
+- **React 18** - Librería de UI
+- **Vite** - Build tool y dev server
+- **TailwindCSS** - Framework de estilos
+- **Lucide React** - Iconos
+- **Rick & Morty API** - Fuente de datos
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+##  Características
 
-## Expanding the ESLint configuration
+-  **Home**: Hero con descripción y personajes destacados
+-  **Personajes**: Listado completo con imagen, estado, especie y género
+-  **Ubicaciones**: Exploración de dimensiones y mundos
+-  **Episodios**: Información de todos los episodios de la serie
+-  **Diseño Responsivo**: Adaptado a móviles, tablets y desktop
+-  **Carga Rápida**: Optimizado con Vite
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+##  Instalación y Ejecución
+
+### Requisitos previos
+- Node.js 16+ 
+- npm o yarn
+
+
+##  Enlaces
+
+## 📂 Estructura del Proyecto
+```
+rickmorty-react/
+├── src/
+│   ├── App.jsx          # Componente principal
+│   ├── main.jsx         # Entry point
+│   └── index.css        # Estilos globales
+├── public/              # Archivos estáticos
+├── package.json         # Dependencias
+├── vite.config.js       # Configuración de Vite
+├── tailwind.config.js   # Configuración de Tailwind
+└── README.md
+```
+
+##  Funcionalidades Implementadas
+
+- ✅ Configuración inicial con Vite
+- ✅ Consumo de API de Rick & Morty
+- ✅ Ruta "/" (Home) con hero y listado de personajes
+- ✅ Ruta "/characters" con listado completo
+- ✅ Ruta "/locations" con ubicaciones
+- ✅ Ruta "/episodes" con episodios
+- ✅ Navegación con sistema de rutas
+- ✅ Estilos con TailwindCSS
+- ✅ Diseño responsivo
+- ✅ Animaciones y transiciones
+
+##  Autor
+
+Desarrollado por Leonardo Alanya
+
+##  Licencia
+
+Este proyecto es de código abierto y está disponible bajo la licencia MIT.
